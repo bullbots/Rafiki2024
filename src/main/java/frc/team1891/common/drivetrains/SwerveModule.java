@@ -4,8 +4,8 @@
 
 package frc.team1891.common.drivetrains;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -21,9 +21,9 @@ import frc.robot.RobotContainer;
 public abstract class SwerveModule {
     protected int ignorCount = 20;
     protected int m_moduleNumber;
-    public static SwerveModule createFromDriveFalconAndSteerFalcon(WPI_TalonFX driveFalcon,
-                                                                   WPI_TalonFX steeringFalcon,
-                                                                   WPI_CANCoder encoder,
+    public static SwerveModule createFromDriveFalconAndSteerFalcon(TalonFX driveFalcon,
+                                                                   TalonFX steeringFalcon,
+                                                                   CANcoder encoder,
                                                                    DrivetrainConfig config,
                                                                    double driveP,
                                                                    double driveI,
@@ -34,12 +34,13 @@ public abstract class SwerveModule {
         return new SwerveModule(encoder, driveP, driveI, driveD, steerP, steerI, steerD, 1) {
             @Override
             public SwerveModuleState getState() {
-                return new SwerveModuleState(config.nativeUnitsToVelocityMeters(driveFalcon.getSelectedSensorVelocity()), getCANCoderRotation2d());
+                return new SwerveModuleState(config.nativeUnitsToVelocityMeters(driveFalcon.get()), getCANCoderRotation2d());
             }
 
             @Override
             public SwerveModulePosition getPosition() {
-                return new SwerveModulePosition(config.nativeUnitsToDistanceMeters(driveFalcon.getSelectedSensorPosition()), getCANCoderRotation2d());
+                // Need to add refresh() in swerve drive train periodic
+                return new SwerveModulePosition(config.nativeUnitsToDistanceMeters(driveFalcon.getPosition().getValue()), getCANCoderRotation2d());
             }
 
             @Override
@@ -50,7 +51,7 @@ public abstract class SwerveModule {
 
                 // Calculate the drive output from the drive PID controller.
                 final double driveOutput =
-                        drivePIDController.calculate(config.nativeUnitsToVelocityMeters(driveFalcon.getSelectedSensorVelocity()), state.speedMetersPerSecond);
+                        drivePIDController.calculate(config.nativeUnitsToVelocityMeters(driveFalcon.get()), state.speedMetersPerSecond);
 
                 // Calculate the turning motor output from the turning PID controller.
                 final double turnOutput =
@@ -63,9 +64,9 @@ public abstract class SwerveModule {
         };
     }
 
-    public static SwerveModule createFromDriveFalconAndSteeringNeo(WPI_TalonFX driveFalcon,
+    public static SwerveModule createFromDriveFalconAndSteeringNeo(TalonFX driveFalcon,
                                                                    CANSparkMax steeringNeo,
-                                                                   WPI_CANCoder encoder,
+                                                                   CANcoder encoder,
                                                                    DrivetrainConfig config,
                                                                    double driveP,
                                                                    double driveI,
@@ -78,12 +79,12 @@ public abstract class SwerveModule {
             
             @Override
             public SwerveModuleState getState() {
-                return new SwerveModuleState(config.nativeUnitsToVelocityMeters(driveFalcon.getSelectedSensorVelocity()), getCANCoderRotation2d());
+                return new SwerveModuleState(config.nativeUnitsToVelocityMeters(driveFalcon.get()), getCANCoderRotation2d());
             }
 
             @Override
             public SwerveModulePosition getPosition() {
-                return new SwerveModulePosition(config.nativeUnitsToDistanceMeters(driveFalcon.getSelectedSensorPosition()), getCANCoderRotation2d());
+                return new SwerveModulePosition(config.nativeUnitsToDistanceMeters(driveFalcon.getPosition().getValue()), getCANCoderRotation2d());
             }
 
             @Override
@@ -96,7 +97,7 @@ public abstract class SwerveModule {
 
                 // Calculate the drive output from the drive PID controller.
                 final double driveOutput =
-                        drivePIDController.calculate(config.nativeUnitsToVelocityMeters(driveFalcon.getSelectedSensorVelocity()), state.speedMetersPerSecond);
+                        drivePIDController.calculate(config.nativeUnitsToVelocityMeters(driveFalcon.get()), state.speedMetersPerSecond);
                 // Calculate the turning motor output from the turning PID controller.
                 double turnOutput =
                         turningPIDController.calculate(getPosition().angle.getRadians(), state.angle.getRadians());
@@ -108,7 +109,7 @@ public abstract class SwerveModule {
                 
                 driveFalcon.set(driveOutput);//-drive out
           
-                System.out.println("M:" + moduleNumber + " speed:" + driveFalcon.getSelectedSensorVelocity()/(13824/0.31918581360472297881));
+                System.out.println("M:" + moduleNumber + " speed:" + driveFalcon.get()/(13824/0.31918581360472297881));
                 if(ignorCount > 0){
                     ignorCount--;
                     steeringNeo.set(turnOutput/8);
@@ -129,7 +130,7 @@ public abstract class SwerveModule {
         };
     }
 
-    private WPI_CANCoder encoder;
+    private CANcoder encoder;
     
     private SwerveModuleState desiredState = new SwerveModuleState();
 
@@ -138,7 +139,7 @@ public abstract class SwerveModule {
     // Using a TrapezoidProfile PIDController to allow for smooth turning
     protected ProfiledPIDController turningPIDController;
 
-    private SwerveModule(WPI_CANCoder encoder, double driveP, double driveI, double driveD, double steerP, double steerI, double steerD, int moduleNumber) {
+    private SwerveModule(CANcoder encoder, double driveP, double driveI, double driveD, double steerP, double steerI, double steerD, int moduleNumber) {
         this.encoder = encoder;
         this.m_moduleNumber = moduleNumber;
         drivePIDController =
@@ -193,7 +194,7 @@ public abstract class SwerveModule {
     }
 
     public double getAbsoluteCANCoderRadians() {
-        double angle = Math.toRadians(encoder.getAbsolutePosition());
+        double angle = Math.toRadians(encoder.getAbsolutePosition().getValue());
         angle %= 2.0 * Math.PI;
         if (angle < 0.0) {
             angle += 2.0 * Math.PI;
