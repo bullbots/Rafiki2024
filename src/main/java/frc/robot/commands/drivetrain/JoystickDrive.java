@@ -36,7 +36,8 @@ public class JoystickDrive extends Command {
     double f = MathUtil.applyDeadband(forward.getAsDouble(), DEADBAND);
     double s = MathUtil.applyDeadband(strafe.getAsDouble(), DEADBAND);
     double t = MathUtil.applyDeadband(twist.getAsDouble(), DEADBAND);
-    drivetrain.holonomicDrive(-f, -s, t, false); // negative is forward on the joystick; chassis left is positive while joystick right is positive.
+    drivetrain.holonomicDrive(-f, -s, t, false);
+     // negative is forward on the joystick; chassis left is positive while joystick right is positive.
 
     if (SMARTDASHBOARD) {
       SmartDashboard.putNumber("joystick/forward", forward.getAsDouble());

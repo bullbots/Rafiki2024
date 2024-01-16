@@ -110,8 +110,8 @@ public class RobotContainer {
   private Trigger m_anyArmMovement = m_moveLow.or(m_moveMed).or(m_moveHigh);
   //Co driver board
   private JoystickButton m_backDriveIntake = new JoystickButton(m_coBox, 2);
-  private JoystickButton m_ConeCubeMode = new JoystickButton(m_coBox, 5);
-  private JoystickButton m_ArmUpBtn = new JoystickButton(m_coBox, 1);
+  public JoystickButton m_ConeCubeMode = new JoystickButton(m_coBox, 5);
+  public JoystickButton m_ArmUpBtn = new JoystickButton(m_coBox, 1);
   private JoystickButton m_ArmDownBtn = new JoystickButton(m_coBox, 12);
   private JoystickButton m_ArmInBtn = new JoystickButton(m_coBox, 8);
   private JoystickButton m_ArmOutBtn = new JoystickButton(m_coBox, 4);
@@ -181,12 +181,15 @@ public class RobotContainer {
                 } else {
                   y = MathUtil.applyDeadband(y, DEADBAND);
                 }
-                if (Math.abs(y) > DEADBAND) {
+                 if (Math.abs(y) > DEADBAND) {
                   x = MathUtil.applyDeadband(x, DEADBAND*.6);
                 } else {
                   x = MathUtil.applyDeadband(x, DEADBAND);
                 }
                 z = MathUtil.applyDeadband(z, DEADBAND);
+
+                
+
                 m_DriveTrain.holonomicDrive(
                     // I may be wrong, but I think all of these should be negative, 
                     // since forward y is negative, and on the x axes left is 
@@ -195,7 +198,7 @@ public class RobotContainer {
                     -y,
                     -x,
                     -z,
-                    true);
+                    false);
             }, m_DriveTrain));
     // if(DriverStation.isDSAttached()) {
     //   firstLogo.schedule();
@@ -252,6 +255,8 @@ public class RobotContainer {
         }, m_DriveTrain)
         .withTimeout(2)
     );
+    m_CoGrab.onTrue(new ButtonPress("pressed"));
+    m_CoGrab.onFalse(new ButtonPress("not pressed"));
     //m_backDriveIntake.whileTrue(new ReverseIntake());
     
     //m_backDriveIntake.whileTrue(new Command(() -> m_intake.setPower(.5, .5)));

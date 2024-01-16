@@ -98,18 +98,31 @@ public abstract class SwerveModule {
                 // Calculate the drive output from the drive PID controller.
                 final double driveOutput =
                         drivePIDController.calculate(config.nativeUnitsToVelocityMeters(driveFalcon.get()), state.speedMetersPerSecond);
+                        // SmartDashboard.putNumber("Position Measurment" + moduleNumber, getPosition().angle.getRadians());
+                        // SmartDashboard.putNumber("Position Goal" + moduleNumber, state.angle.getRadians());
                 // Calculate the turning motor output from the turning PID controller.
                 double turnOutput =
-                        turningPIDController.calculate(getPosition().angle.getRadians(), state.angle.getRadians());
-                if(turningPIDController.atSetpoint()){
-                    //turnOutput = 0;
-                }
+                         turningPIDController.calculate(getPosition().angle.getRadians(), state.angle.getRadians());
+                
+                //double   turnOutput = 0.5;
+                SmartDashboard.putNumber("getCANCoderRotation2d"+ this.m_moduleNumber, getCANCoderRotation2d().getDegrees());
+                SmartDashboard.putNumber("desiredState"+ this.m_moduleNumber, desiredState.angle.getDegrees());
+                SmartDashboard.putNumber("SwerveModule angle drive"+ this.m_moduleNumber, state.angle.getDegrees());
+                SmartDashboard.putNumber("turnOutput-" + this.m_moduleNumber, turnOutput);
+
+                // double testOutput = turningPIDController.calculate(90,0);
+                //double testOutput = turningPIDController.calculate(-Math.PI / 2, 0);
+
+                // if (moduleNumber == 1){
+                //     SmartDashboard.putNumber("testOutput" + moduleNumber, testOutput);
+                // }
+
                 // Calculate the turning motor output from the turning PID controller.
                 double drivingPower = state.speedMetersPerSecond/4;
                 
                 driveFalcon.set(driveOutput);//-drive out
           
-                System.out.println("M:" + moduleNumber + " speed:" + driveFalcon.get()/(13824/0.31918581360472297881));
+                System.out.println("M:" + moduleNumber + " speed:" + driveFalcon.get()/(13824/0.31918581360472297881)); // ticks/s -> m/s
                 if(ignorCount > 0){
                     ignorCount--;
                     steeringNeo.set(turnOutput/8);

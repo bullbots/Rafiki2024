@@ -165,7 +165,11 @@ public class SwerveDrivetrain extends HolonomicDrivetrain {
             new ChassisSpeeds(xSpeed, ySpeed, rot)
         );
     }
-
+    // for(int i = 0; i < 4; i++){
+      
+    //   SmartDashboard.putNumber("swerveModuleStates speedMetersPerSecond"+i, swerveModuleStates[i].speedMetersPerSecond);
+    //   SmartDashboard.putNumber("swerveModuleStates degrees"+i, swerveModuleStates[i].angle.getDegrees());
+    // }
     setSwerveModuleStates(swerveModuleStates);
   }
   public void setInputScale(double scale){
@@ -184,7 +188,11 @@ public class SwerveDrivetrain extends HolonomicDrivetrain {
   public void setSwerveModuleStates(SwerveModuleState[] swerveModuleStates) {
     // Normalize wheel speeds
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, config.chassisMaxVelocityMetersPerSecond);
-
+// for(int i = 0; i < 4; i++){
+      
+//       SmartDashboard.putNumber("swerveModuleStates speedMetersPerSecond"+i, swerveModuleStates[i].speedMetersPerSecond);
+//       SmartDashboard.putNumber("swerveModuleStates degrees"+i, swerveModuleStates[i].angle.getDegrees());
+//     }
     frontLeft.setDesiredState(swerveModuleStates[0]);
     frontRight.setDesiredState(swerveModuleStates[1]);
     backLeft.setDesiredState(swerveModuleStates[2]);
