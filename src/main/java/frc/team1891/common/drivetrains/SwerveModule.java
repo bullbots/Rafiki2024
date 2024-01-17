@@ -207,7 +207,7 @@ public abstract class SwerveModule {
     }
 
     public double getAbsoluteCANCoderRadians() {
-        double angle = Math.toRadians(encoder.getAbsolutePosition().getValue());
+        double angle = encoder.getAbsolutePosition().getValue() * 2 * Math.PI;
         angle %= 2.0 * Math.PI;
         if (angle < 0.0) {
             angle += 2.0 * Math.PI;
