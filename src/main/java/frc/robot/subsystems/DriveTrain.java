@@ -91,15 +91,15 @@ public class DriveTrain extends SwerveDrivetrain {
    */
   public static ProfiledPIDController getTunedRotationalPIDControllerForHolonomicDrive() {
     ProfiledPIDController controller = new ProfiledPIDController(
-      1.2, 0.1, 0,
-      new TrapezoidProfile.Constraints(2.5, 2.5)
+      1.2, 0, 0,
+      new TrapezoidProfile.Constraints(2.5, 5)
     );
     controller.enableContinuousInput(0, 2*Math.PI);
     controller.setTolerance(ROTATIONAL_TOLERANCE);
     return controller;
   }
   
-  public static double maxMetersPerSecond = 8;
+  public static double maxMetersPerSecond = 2;
 
   private static final ShuffleboardTab _shuffuleboardTab = Shuffleboard.getTab("Drivetrain");
   public static final DrivetrainConfig _config = new DrivetrainConfig(maxMetersPerSecond, .5, 7, 2, Units.inchesToMeters(2), 6.75, 2048);
