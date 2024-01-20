@@ -104,7 +104,7 @@ public class DriveTrain extends SwerveDrivetrain {
   private static final ShuffleboardTab _shuffuleboardTab = Shuffleboard.getTab("Drivetrain");
   public static final DrivetrainConfig _config = new DrivetrainConfig(maxMetersPerSecond, .5, 7, 2, Units.inchesToMeters(2), 6.75, 2048);
   // public static final SimNavX _gyro = new SimNavX(SPI.Port.kMXP);
-  public static final SimNavX _gyro = new SimNavX(SPI.Port.kMXP);
+  public static final SimNavX _gyro = new SimNavX(SerialPort.Port.kUSB2);
 
   private static final TalonFX frontLeftDriveFalcon = new TalonFX(Constants.Drivetrain.FRONT_LEFT_DRIVE_CHANNEL);
   private static final WPI_CANSparkMax frontLeftSteerFalcon = new WPI_CANSparkMax(Constants.Drivetrain.FRONT_LEFT_STEER_CHANNEL, MotorType.kBrushless);
