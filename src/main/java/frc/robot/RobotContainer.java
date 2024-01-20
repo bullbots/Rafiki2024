@@ -47,10 +47,6 @@ import frc.team1891.common.logger.BullLogger;
 public class RobotContainer {
   // Subsystems
   private final DriveTrain m_DriveTrain = DriveTrain.getInstance();
-  // public final Intake m_intake = Intake.getInstance();
-  // public final GrabbyArm m_arm = GrabbyArm.getInstance();
-  // public final Conveyer m_conveyer = Conveyer.getInstance();
-  // public final Grabber m_Grabber = Grabber.getInstance();
   // public final PneumaticHub m_Hub = new PneumaticHub();
 
   // public final MatrixLEDs m_LEDSystem = MatrixLEDs.getInstance();
@@ -215,16 +211,8 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    //m_intakeButton.whileTrue(new IntakeCommand(m_intake, m_conveyer));
-    //m_intakeButton.onFalse(new Release(m_Grabber).andThen(Commands.waitSeconds(.4)).andThen(new FullRetract(m_arm)));
     m_FaceForward.onTrue(new NorthUntilInterupt(m_DriveTrain,()-> m_driverController.getLeftX(),() -> m_driverController.getLeftY(),() -> m_rightStickTrig.getAsBoolean()));
     
-    //m_alignToPlaceButton.onTrue(new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickConeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()));
-      //m_alignToPlaceButton.onTrue(new ConditionalCommand(
-      //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickCubeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
-      //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickConeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
-      //()-> scoringForCubes));
-
     m_POVNorth.onTrue(
       new InstantCommand(
             () ->
@@ -255,30 +243,11 @@ public class RobotContainer {
         }, m_DriveTrain)
         .withTimeout(2)
     );
+
+    // This is an experiment for the buttons
     m_CoGrab.onTrue(new ButtonPress("pressed"));
     m_CoGrab.onFalse(new ButtonPress("not pressed"));
-    //m_backDriveIntake.whileTrue(new ReverseIntake());
-    
-    //m_backDriveIntake.whileTrue(new Command(() -> m_intake.setPower(.5, .5)));
-    //m_ArmUpBtn.whileTrue(new LiftArm(m_arm, 0.25));
-    //m_ArmDownBtn.whileTrue(new LiftArm(m_arm, -0.25));
-    //m_ArmOutBtn.whileTrue(new ExtendArm(m_arm, .3));
-    //m_ArmInBtn.whileTrue(new ExtendArm(m_arm, -.3));
-    //m_zeroArm.onTrue(new InstantCommand(()-> m_arm.zeroAll()));
-    //m_ConeCubeMode.onTrue(new InstantCommand(() -> coneMode()).andThen(new RunMatrixImageCommand(m_LEDSystem, YamlLoader.getImage("cone256"))));
-    //m_ConeCubeMode.onFalse(new InstantCommand(() -> cubeMode()).andThen(new RunMatrixImageCommand(m_LEDSystem, YamlLoader.getImage("cube256"))));
-    //m_CoGrab.onTrue(new ToggleGrab(m_Grabber));
 
-    //m_anyArmMovement.onTrue(new InstantCommand(() -> m_compressor.disable()));
-    //m_anyArmMovement.onFalse(new InstantCommand(() -> m_compressor.enableDigital()));
-
-    //if the arm is out open claw and retract otherwise just toggle the claw
-    //m_drop.onTrue(new ConditionalCommand(
-    //   new ToggleGrab(m_Grabber),
-    //   new DropAndLower(m_Grabber, m_arm),
-    //   ()-> m_arm.isRetracted()
-    // ));
-    
     SmartDashboard.putData("set to 90", new InstantCommand(){
       @Override
       public void initialize() {

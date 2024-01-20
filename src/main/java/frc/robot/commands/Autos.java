@@ -5,11 +5,8 @@
 package frc.robot.commands;
 
 import frc.robot.Constants.Drivetrain;
-import frc.robot.commands.drivetrain.ChargeStation;
-import frc.robot.commands.drivetrain.ChargeStationFull;
 import frc.robot.commands.drivetrain.WaitForNavX;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Grabber;
 import frc.team1891.common.trajectory.HolonomicTrajectoryCommandGenerator;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,10 +23,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import static frc.robot.utility.MirrorPoses.mirror;
 
 public final class Autos {
-  // static GrabbyArm m_arm;
-  // static Grabber m_grab;
-  // static Intake m_intake;
-  // static Conveyer m_belt;
   // static DriveTrain m_DriveTrain;
   
   private Autos() {
@@ -44,12 +37,8 @@ public final class Autos {
     HolonomicTrajectoryCommandGenerator.setRotationalPID(1,0,0);
     HolonomicTrajectoryCommandGenerator.setTranslationalPID(1,0,0);
 
-    // m_arm = GrabbyArm.getInstance();
-    // m_grab = Grabber.getInstance();
-    // m_belt = Conveyer.getInstance();
-    // m_intake = Intake.getInstance();
     // m_DriveTrain = DriveTrain.getInstance();
-    // m_belt = Conveyer.getInstance();
+  
 
     // commandChooser.setDefaultOption("Tribute to Swervy from Stephen", new Pair<Command,Command>(
     //   HolonomicTrajectoryCommandGenerator.generate(DriveTrain.getInstance(),
@@ -83,8 +72,6 @@ public final class Autos {
       //   new AutoPlace(m_arm, m_grab, ArmState.TOP).andThen(new RunCommand(()->m_DriveTrain.fromChassisSpeeds(new ChassisSpeeds(1,0,0)), m_DriveTrain).withTimeout(4.75)),
       //   new AutoPlace(m_arm, m_grab, ArmState.TOP).andThen(new RunCommand(()->m_DriveTrain.fromChassisSpeeds(new ChassisSpeeds(1,0,0)), m_DriveTrain).withTimeout(4.75))
       // ));
-      // commandChooser.addOption("place and charge station", new Pair<Command,Command>(new PlaceAndChargeStation(m_arm, m_grab, m_belt, m_DriveTrain), new PlaceAndChargeStation(m_arm, m_grab, m_belt, m_DriveTrain)));
-      // commandChooser.addOption("Charge station only", new Pair<Command,Command>(new ChargeStationFull(m_DriveTrain, DriveTrain._gyro,true),new ChargeStationFull(m_DriveTrain, DriveTrain._gyro,true)));
       // commandChooser.addOption("Taxi Only", new Pair<Command,Command>(
       //   new RunCommand(()->m_DriveTrain.fromChassisSpeeds(new ChassisSpeeds(1,0,0)), m_DriveTrain).withTimeout(4.75),
       //   new RunCommand(()->m_DriveTrain.fromChassisSpeeds(new ChassisSpeeds(1,0,0)), m_DriveTrain).withTimeout(4.75)
