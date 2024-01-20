@@ -5,8 +5,6 @@ package frc.robot.commands.drivetrain;
 
 import java.util.function.Supplier;
 
-import com.ctre.phoenix.Util;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -62,6 +60,9 @@ public class DriveToPose extends Command {
     targetPose = targetPoseSupplier.get();
   }
 
+  private double capValue(double value, double cap) {
+    if (value > cap){return cap;}else if (value < -cap){return -cap;} else {return value;}
+  }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -69,8 +70,8 @@ public class DriveToPose extends Command {
       return;
     }
     Pose2d currentPose = drivetrain.getPose2d();
-    double xFeedback = Util.cap(xController.calculate(currentPose.getX(), targetPose.getX()), 1.8);
-    double yFeedback = Util.cap(yController.calculate(currentPose.getY(), targetPose.getY()), 1.8);
+    double xFeedback = capValue(xController.calculate(currentPose.getX(), targetPose.getX()), 1.8);
+    double yFeedback = capValue(yController.calculate(currentPose.getY(), targetPose.getY()), 1.8);
     //double xFeedback = xController.calculate(currentPose.getX(), targetPose.getX());
     //double yFeedback = yController.calculate(currentPose.getY(), targetPose.getY());
     double thetaFF = angleController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());

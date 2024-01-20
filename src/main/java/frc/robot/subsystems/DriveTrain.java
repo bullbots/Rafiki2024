@@ -1,11 +1,14 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
+
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -88,39 +91,39 @@ public class DriveTrain extends SwerveDrivetrain {
    */
   public static ProfiledPIDController getTunedRotationalPIDControllerForHolonomicDrive() {
     ProfiledPIDController controller = new ProfiledPIDController(
-      1.2, 0.1, 0,
-      new TrapezoidProfile.Constraints(2.5, 2.5)
+      1.2, 0, 0,
+      new TrapezoidProfile.Constraints(2.5, 5)
     );
     controller.enableContinuousInput(0, 2*Math.PI);
     controller.setTolerance(ROTATIONAL_TOLERANCE);
     return controller;
   }
   
-  public static double maxMetersPerSecond = 8;
+  public static double maxMetersPerSecond = 2;
 
   private static final ShuffleboardTab _shuffuleboardTab = Shuffleboard.getTab("Drivetrain");
   public static final DrivetrainConfig _config = new DrivetrainConfig(maxMetersPerSecond, .5, 7, 2, Units.inchesToMeters(2), 6.75, 2048);
   // public static final SimNavX _gyro = new SimNavX(SPI.Port.kMXP);
   public static final SimNavX _gyro = new SimNavX(SPI.Port.kMXP);
 
-  private static final WPI_TalonFX frontLeftDriveFalcon = new WPI_TalonFX(Constants.Drivetrain.FRONT_LEFT_DRIVE_CHANNEL);
+  private static final TalonFX frontLeftDriveFalcon = new TalonFX(Constants.Drivetrain.FRONT_LEFT_DRIVE_CHANNEL);
   private static final WPI_CANSparkMax frontLeftSteerFalcon = new WPI_CANSparkMax(Constants.Drivetrain.FRONT_LEFT_STEER_CHANNEL, MotorType.kBrushless);
-  private static final WPI_CANCoder frontLeftEncoder = new WPI_CANCoder(Constants.Drivetrain.FRONT_LEFT_CANCODER_CHANNEL);
+  private static final CANcoder frontLeftEncoder = new CANcoder(Constants.Drivetrain.FRONT_LEFT_CANCODER_CHANNEL);
   private static final SwerveModule frontLeft = SwerveModule.createFromDriveFalconAndSteeringNeo(frontLeftDriveFalcon, frontLeftSteerFalcon, frontLeftEncoder, _config, .1,0,0,.8,0,0,1);
   
-  private static final WPI_TalonFX frontRightDriveFalcon = new WPI_TalonFX(Constants.Drivetrain.FRONT_RIGHT_DRIVE_CHANNEL);
+  private static final TalonFX frontRightDriveFalcon = new TalonFX(Constants.Drivetrain.FRONT_RIGHT_DRIVE_CHANNEL);
   private static final WPI_CANSparkMax frontRightSteerFalcon = new WPI_CANSparkMax(Constants.Drivetrain.FRONT_RIGHT_STEER_CHANNEL, MotorType.kBrushless);
-  private static final WPI_CANCoder frontRightEncoder = new WPI_CANCoder(Constants.Drivetrain.FRONT_RIGHT_CANCODER_CHANNEL);
+  private static final CANcoder frontRightEncoder = new CANcoder(Constants.Drivetrain.FRONT_RIGHT_CANCODER_CHANNEL);
   private static final SwerveModule frontRight = SwerveModule.createFromDriveFalconAndSteeringNeo(frontRightDriveFalcon, frontRightSteerFalcon, frontRightEncoder, _config, .1,0,0,.8,0,0,3);
   
-  private static final WPI_TalonFX backLeftDriveFalcon = new WPI_TalonFX(Constants.Drivetrain.BACK_LEFT_DRIVE_CHANNEL);
+  private static final TalonFX backLeftDriveFalcon = new TalonFX(Constants.Drivetrain.BACK_LEFT_DRIVE_CHANNEL);
   private static final WPI_CANSparkMax backLeftSteerFalcon = new WPI_CANSparkMax(Constants.Drivetrain.BACK_LEFT_STEER_CHANNEL, MotorType.kBrushless);
-  private static final WPI_CANCoder backLeftEncoder = new WPI_CANCoder(Constants.Drivetrain.BACK_LEFT_CANCODER_CHANNEL);
+  private static final CANcoder backLeftEncoder = new CANcoder(Constants.Drivetrain.BACK_LEFT_CANCODER_CHANNEL);
   private static final SwerveModule backLeft = SwerveModule.createFromDriveFalconAndSteeringNeo(backLeftDriveFalcon, backLeftSteerFalcon, backLeftEncoder, _config, .1,0,0,.8,0,0,2);
   
-  private static final WPI_TalonFX backRightDriveFalcon = new WPI_TalonFX(Constants.Drivetrain.BACK_RIGHT_DRIVE_CHANNEL);
+  private static final TalonFX backRightDriveFalcon = new TalonFX(Constants.Drivetrain.BACK_RIGHT_DRIVE_CHANNEL);
   private static final WPI_CANSparkMax backRightSteerFalcon = new WPI_CANSparkMax(Constants.Drivetrain.BACK_RIGHT_STEER_CHANNEL, MotorType.kBrushless);
-  private static final WPI_CANCoder backRightEncoder = new WPI_CANCoder(Constants.Drivetrain.BACK_RIGHT_CANCODER_CHANNEL);
+  private static final CANcoder backRightEncoder = new CANcoder(Constants.Drivetrain.BACK_RIGHT_CANCODER_CHANNEL);
   private static final SwerveModule backRight = SwerveModule.createFromDriveFalconAndSteeringNeo(backRightDriveFalcon, backRightSteerFalcon, backRightEncoder, _config, .1,0,0,.8,0,0,4);
   
   // logging
@@ -128,17 +131,17 @@ public class DriveTrain extends SwerveDrivetrain {
 
   final DoubleSubscriber[] moduleSub = new DoubleSubscriber[4];
   double[] prev = new double[4];
-  WPI_CANCoder[] encoders;
+  CANcoder[] encoders;
   
   double savedX;
-  CircularBuffer estimatePoseBuffer;
+  CircularBuffer<Double> estimatePoseBuffer;
   int visionPeriodicTicker = 0;
   int staleVisionTicker = 0;
 
   NetworkTable limeNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
   private DriveTrain(){
     super(_shuffuleboardTab, _config, .501652, .62865, _gyro, frontLeft, frontRight, backLeft, backRight);
-    encoders = new WPI_CANCoder[]{frontLeftEncoder, backLeftEncoder, frontRightEncoder, backRightEncoder};
+    encoders = new CANcoder[]{frontLeftEncoder, backLeftEncoder, frontRightEncoder, backRightEncoder};
     
     gyro.setAngleAdjustment(0);
     configDriveMotor(frontLeftDriveFalcon);
@@ -177,7 +180,7 @@ public class DriveTrain extends SwerveDrivetrain {
     }
 
     configureShuffleboard();
-    estimatePoseBuffer = new CircularBuffer(8);
+    estimatePoseBuffer = new CircularBuffer<Double>(8);
 
     // set up logging
     m_CurrentBLLogger = new BullLogger("DriveTrain current Drive BL", true, false);
@@ -185,9 +188,9 @@ public class DriveTrain extends SwerveDrivetrain {
     //m_CurrentBLLogger.setLogLevel(BullLogger.LogLevel.DEBUG);
   }
 
-  private static void configDriveMotor(WPI_TalonFX driveMotor) {
-    driveMotor.configFactoryDefault();
-    driveMotor.setNeutralMode(NeutralMode.Brake);
+  private static void configDriveMotor(TalonFX driveMotor) {
+    driveMotor.getConfigurator().apply(new TalonFXConfiguration());
+    driveMotor.setNeutralMode(NeutralModeValue.Brake);
   }
 
   private static void configSteerMotor(CANSparkMax steerMotor) {
@@ -196,7 +199,7 @@ public class DriveTrain extends SwerveDrivetrain {
     steerMotor.setInverted(true);
   }
 
-  private static void configCANCoder(WPI_CANCoder encoder, double encoderOffset) {
+  private static void configCANCoder(CANcoder encoder, double encoderOffset) {
     //encoder.configFactoryDefault();
     //encoder.configMagnetOffset(encoderOffset);
   }
@@ -213,6 +216,10 @@ public class DriveTrain extends SwerveDrivetrain {
       }
     }
     SmartDashboard.putNumber("robot pitch angle", gyro.getPitch());
+    SmartDashboard.putNumber("SwerveModule1 angle", frontRightEncoder.getAbsolutePosition().getValue());
+    SmartDashboard.putNumber("SwerveModule2 angle", frontLeftEncoder.getAbsolutePosition().getValue());
+    SmartDashboard.putNumber("SwerveModule3 angle", backLeftEncoder.getAbsolutePosition().getValue());
+    SmartDashboard.putNumber("SwerveModule4 angle", backRightEncoder.getAbsolutePosition().getValue());
     //System.out.println("Gyro pitch: " + gyro.getPitch());
     //double[] visionPose = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
     if(Robot.isReal()){

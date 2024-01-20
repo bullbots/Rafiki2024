@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -24,7 +25,7 @@ public class NorthUntilInterupt extends Command {
   private final ProfiledPIDController angleController;
 
   /** Creates a new NorthUntilInterupt. */
-  public NorthUntilInterupt(DriveTrain drivetrain, DoubleSupplier forward, DoubleSupplier strafe, BooleanSupplier interrupt) {
+  public NorthUntilInterupt(DriveTrain drivetrain, DoubleSupplier strafe, DoubleSupplier forward, BooleanSupplier interrupt) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
     this.drivetrain = drivetrain;
@@ -66,8 +67,7 @@ public class NorthUntilInterupt extends Command {
     //targetAngle = (targetAngle == null) ? previousTarget : targetAngle;
   
     double t = angleController.calculate(currentAngle.getRadians(), targetAngle.getRadians());
-
-    drivetrain.holonomicDrive( -s, -f, t, true);
+    drivetrain.holonomicDrive( -f, -s, -t, true);
     //System.out.println("current angle : " + currentAngle);
   }
 

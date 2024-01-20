@@ -5,7 +5,6 @@
 package frc.robot.commands.drivetrain;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.MatrixLEDs;
@@ -36,7 +35,7 @@ public class ChargeStation extends Command {
   @Override
   public void initialize() {
     phase = 0;
-    gyro.calibrate();
+    //gyro calibrates automatically
     System.out.println("Driving up charge station");
   }
 

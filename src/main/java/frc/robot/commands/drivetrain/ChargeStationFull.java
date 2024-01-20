@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.grabber.Grab;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Grabber;
 import frc.team1891.common.hardware.SimNavX;
@@ -30,7 +29,6 @@ public class ChargeStationFull extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new Grab(Grabber.getInstance()),
       new ConditionalCommand(
         new RunCommand(()->driveTrain.setSwerveModuleStates(states), driveTrain).raceWith(Commands.waitSeconds(.6)), 
         new InstantCommand(), 
