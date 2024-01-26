@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.lang.Runnable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -18,5 +19,9 @@ public class Limelight{
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
+    }
+
+    public void run(){
+        getAll();
     }
 }
