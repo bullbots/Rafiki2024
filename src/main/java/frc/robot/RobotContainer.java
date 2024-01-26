@@ -96,7 +96,7 @@ public class RobotContainer {
   private JoystickButton m_drop = new JoystickButton(m_driverController, XboxController.Button.kA.value);
   private JoystickButton m_xwheels = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
 
-  private JoystickButton m_strafeAlongWallButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+  private JoystickButton m_strafeAndMoveForwardButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
 
   private AxisTrigger m_leftrightTrigger = new AxisTrigger(m_driverController, XboxController.Axis.kLeftX.value);
   private AxisTrigger m_forwardBack = new AxisTrigger(m_driverController, XboxController.Axis.kLeftY.value);
@@ -226,7 +226,7 @@ public class RobotContainer {
       //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickCubeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
       //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickConeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
       //()-> scoringForCubes));
-    m_strafeAlongWallButton.onTrue(new InsertCommandHere);
+    m_strafeAndMoveForwardButton.onTrue(new StrafeAndMoveForward(.1, .1, m_DriveTrain));
 
     m_POVNorth.onTrue(
       new InstantCommand(
