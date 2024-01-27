@@ -85,6 +85,7 @@ public class RobotContainer {
     
     
   private Limelight limelight = new Limelight();
+  private Thread limelightThread;
   private JoystickRotation2d rightStickRotation2d = new JoystickRotation2d(() -> MathUtil.applyDeadband(-m_driverController.getRightY(), JoystickDrive.DEADBAND), () -> MathUtil.applyDeadband(-m_driverController.getRightX(), JoystickDrive.DEADBAND));
   private JoystickButton m_intakeButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private JoystickButton m_resetGyroJoystickButton = new JoystickButton(m_driverController, XboxController.Button.kRightStick.value);
@@ -129,7 +130,8 @@ public class RobotContainer {
     String number_image = "";
   //private JoystickButton m_autopilotToCommunity = new JoystickButton(m_coBox, 1);
   public void periodic() {
-    limelight.getAll();
+    limelightThread = new Thread(limelight);
+    limelightThread.start();
     // SmartDashboard.putNumber("Tank Pressure", m_Hub.getPressure(0));
     // int seconds = (int)DriverStation.getMatchTime();
     // if(seconds <= 30 && seconds > 0 && DriverStation.isTeleop()){
