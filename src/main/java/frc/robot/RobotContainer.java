@@ -8,6 +8,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+
+
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
@@ -22,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.*;
 import frc.robot.commands.drivetrain.DriveToPose;
@@ -86,15 +89,18 @@ public class RobotContainer {
     
 
   private JoystickRotation2d rightStickRotation2d = new JoystickRotation2d(() -> MathUtil.applyDeadband(-m_driverController.getRightY(), JoystickDrive.DEADBAND), () -> MathUtil.applyDeadband(-m_driverController.getRightX(), JoystickDrive.DEADBAND));
-  private JoystickButton m_intakeButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+  //private JoystickButton m_intakeButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private JoystickButton m_resetGyroJoystickButton = new JoystickButton(m_driverController, XboxController.Button.kRightStick.value);
   private JoystickButton m_FaceForward = new JoystickButton(m_driverController, XboxController.Button.kLeftStick.value);
-  private JoystickButton m_alignToPlaceButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  /*private JoystickButton m_alignToPlaceButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);*/
   private JoystickButton m_moveLow = new JoystickButton(m_driverController, XboxController.Button.kX.value);
   private JoystickButton m_moveMed = new JoystickButton(m_driverController, XboxController.Button.kY.value);
   private JoystickButton m_moveHigh = new JoystickButton(m_driverController, XboxController.Button.kB.value);
   private JoystickButton m_drop = new JoystickButton(m_driverController, XboxController.Button.kA.value);
   private JoystickButton m_xwheels = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+
+  private JoystickButton m_strafeLeft = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  private JoystickButton m_strafeRight = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
 
   private AxisTrigger m_leftrightTrigger = new AxisTrigger(m_driverController, XboxController.Axis.kLeftX.value);
   private AxisTrigger m_forwardBack = new AxisTrigger(m_driverController, XboxController.Axis.kLeftY.value);
@@ -225,6 +231,8 @@ public class RobotContainer {
       //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickCubeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
       //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickConeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
       //()-> scoringForCubes));
+    m_strafeLeft.whileTrue(new RepeatCommand( new StrafeAndMoveForward(2, .1, m_DriveTrain)));
+    m_strafeRight.whileTrue(new RepeatCommand( new StrafeAndMoveForward(-2, .1, m_DriveTrain)));
 
     m_POVNorth.onTrue(
       new InstantCommand(
