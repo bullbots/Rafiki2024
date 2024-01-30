@@ -89,7 +89,7 @@ public class RobotContainer {
     
 
   private JoystickRotation2d rightStickRotation2d = new JoystickRotation2d(() -> MathUtil.applyDeadband(-m_driverController.getRightY(), JoystickDrive.DEADBAND), () -> MathUtil.applyDeadband(-m_driverController.getRightX(), JoystickDrive.DEADBAND));
-  private JoystickButton m_intakeButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+  //private JoystickButton m_intakeButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private JoystickButton m_resetGyroJoystickButton = new JoystickButton(m_driverController, XboxController.Button.kRightStick.value);
   private JoystickButton m_FaceForward = new JoystickButton(m_driverController, XboxController.Button.kLeftStick.value);
   /*private JoystickButton m_alignToPlaceButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);*/
@@ -99,7 +99,8 @@ public class RobotContainer {
   private JoystickButton m_drop = new JoystickButton(m_driverController, XboxController.Button.kA.value);
   private JoystickButton m_xwheels = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
 
-  private JoystickButton m_strafeAndMoveForwardButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  private JoystickButton m_strafeLeft = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  private JoystickButton m_strafeRight = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
 
   private AxisTrigger m_leftrightTrigger = new AxisTrigger(m_driverController, XboxController.Axis.kLeftX.value);
   private AxisTrigger m_forwardBack = new AxisTrigger(m_driverController, XboxController.Axis.kLeftY.value);
@@ -202,7 +203,7 @@ public class RobotContainer {
                     // It checks out in the simulator..
                     -y,
                     -x,
-                    -z,
+                    z,
                     true);
             }, m_DriveTrain));
     // if(DriverStation.isDSAttached()) {
@@ -229,7 +230,8 @@ public class RobotContainer {
       //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickCubeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
       //new DriveToPose(m_DriveTrain, ()-> m_DriveTrain.pickConeScoringArea().getPose2d(), () -> m_leftrightTrigger.or(m_forwardBack.or(m_rightStickTrig)).getAsBoolean()),
       //()-> scoringForCubes));
-    m_strafeAndMoveForwardButton.whileTrue(new RepeatCommand( new StrafeAndMoveForward(2, .2, m_DriveTrain)));
+    m_strafeLeft.whileTrue(new RepeatCommand( new StrafeAndMoveForward(2, .1, m_DriveTrain)));
+    m_strafeRight.whileTrue(new RepeatCommand( new StrafeAndMoveForward(-2, .1, m_DriveTrain)));
 
     m_POVNorth.onTrue(
       new InstantCommand(

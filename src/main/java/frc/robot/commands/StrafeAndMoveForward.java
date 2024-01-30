@@ -21,10 +21,7 @@ public class StrafeAndMoveForward extends Command {
        m_driveTrain.holonomicDrive(forward, sideways, 0, true);
     }
 
-    @Override
-    public void end(boolean interrupted){
-        m_driveTrain.stop();
-    }
+   
 
     @Override
     public boolean isFinished(){
