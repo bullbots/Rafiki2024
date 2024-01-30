@@ -7,7 +7,10 @@ public class StrafeAndMoveForward extends Command {
     double forward;
     double sideways;
     DriveTrain m_driveTrain;
+    boolean x;
+    
     public StrafeAndMoveForward(double sideSpeed, double forwardSpeed, DriveTrain drivetrain){
+        addRequirements(drivetrain);
         forward = forwardSpeed;
         sideways = sideSpeed;
         m_driveTrain = drivetrain;
@@ -17,6 +20,12 @@ public class StrafeAndMoveForward extends Command {
     public void execute(){
        m_driveTrain.holonomicDrive(forward, sideways, 0, true);
     }
+
+    @Override
+    public void end(boolean interrupted){
+        m_driveTrain.stop();
+    }
+
     @Override
     public boolean isFinished(){
         return true;

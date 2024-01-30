@@ -302,7 +302,7 @@ public class DriveTrain extends SwerveDrivetrain {
 
     poseEstimator.resetPosition(_gyro.getRotation2d(), getSwerveModulePositions(), newPose);
   }
-  public void resetAngle(double deg){
+  public void   resetAngle(double deg){
     poseEstimator.resetPosition(gyro.getRotation2d(), getSwerveModulePositions(), new Pose2d(getPose2d().getTranslation(), Rotation2d.fromDegrees(deg)));
     System.out.println("Reseting Gyro");
   }
