@@ -1,13 +1,17 @@
 import math
+import json
 def convert_to_meters(x: float):
     return (x/39.37)
 
 def convert_array_to_fmap(coords: tuple):
-    x = convert_to_meters(coords[0])-8.27
-    y = convert_to_meters(coords[1])-4.105
-    z = convert_to_meters(coords[2])
+    x = round(convert_to_meters(coords[0])-8.27,2)
+    y = round(convert_to_meters(coords[1])-4.105,2)
+    z = round(convert_to_meters(coords[2]),2)
     a = math.radians(coords[3])
-    return [math.cos(a),-math.sin(a),0,x,math.sin(a),-math.cos(a),0,y,0,0,1,z,0,0,0,1]
+    return [round(math.cos(a),2),round(-math.sin(a),2),0,x,
+            round(math.sin(a),2),round(math.cos(a),2),0,y,
+            0,0,1,z,
+            0,0,0,1]
 
 
 all_coords = [
@@ -29,11 +33,16 @@ all_coords = [
     (182.73,146.19,52,240)
 ]
 
-fmap = "{\"fiducials\":["
+fmap = {"fiducials":list(all_coords)}
 for i,item in enumerate(all_coords):
-    fmap += "{\"unique\":1,\"family\":\"apriltag3_16h5_classic\",\"size\":152.4,\"id\":" + str(i+1) + ",\"transform\":" + str(convert_array_to_fmap(item)) + "}"
-    if i+1 != len(all_coords):
-        fmap += ","
-fmap += "]}"
+    fmap["fiducials"][i]={"unique":1,
+                          "family":"apriltag3_16h5_classic",
+                          "size":152.4,
+                          "id":str(i+1),
+                          "transform":convert_array_to_fmap(item)}
 
 print(fmap)
+with open("src/main/java/frc/robot/subsystems/AprilTags.fmap", "w") as jsonf:
+    json.dump(fmap,jsonf)
+    jsonf.close()
+    
