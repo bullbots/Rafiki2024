@@ -18,23 +18,23 @@ public final class Constants {
   public static double FIELD_WIDTH = Units.feetToMeters(27);
   public static double FIELD_LENGTH = Units.feetToMeters(54);
   public static class Drivetrain{
-    public static final int FRONT_LEFT_DRIVE_CHANNEL = 2;
-        public static final int FRONT_LEFT_STEER_CHANNEL = 2;
+    public static final int FRONT_LEFT_DRIVE_CHANNEL = 1;
+        public static final int FRONT_LEFT_STEER_CHANNEL = 1;
 
-        public static final int FRONT_RIGHT_DRIVE_CHANNEL = 1;
-        public static final int FRONT_RIGHT_STEER_CHANNEL = 1;
+        public static final int FRONT_RIGHT_DRIVE_CHANNEL = 2;
+        public static final int FRONT_RIGHT_STEER_CHANNEL = 2;
 
-        public static final int BACK_LEFT_DRIVE_CHANNEL = 3;
-        public static final int BACK_LEFT_STEER_CHANNEL = 3;
+        public static final int BACK_LEFT_DRIVE_CHANNEL = 4;
+        public static final int BACK_LEFT_STEER_CHANNEL = 4;
 
-        public static final int BACK_RIGHT_DRIVE_CHANNEL = 4;
-        public static final int BACK_RIGHT_STEER_CHANNEL = 4;
+        public static final int BACK_RIGHT_DRIVE_CHANNEL = 3;
+        public static final int BACK_RIGHT_STEER_CHANNEL = 3;
 
-        public static final int FRONT_LEFT_CANCODER_CHANNEL = 2;
-        public static final int FRONT_RIGHT_CANCODER_CHANNEL = 1;
+        public static final int FRONT_LEFT_CANCODER_CHANNEL = 1;
+        public static final int FRONT_RIGHT_CANCODER_CHANNEL = 2;
 
-        public static final int BACK_LEFT_CANCODER_CHANNEL = 3;
-        public static final int BACK_RIGHT_CANCODER_CHANNEL = 4;
+        public static final int BACK_LEFT_CANCODER_CHANNEL = 4;
+        public static final int BACK_RIGHT_CANCODER_CHANNEL = 3;
         // ENCODER OFFSETS
         public static final double FRONT_LEFT_ENCODER_OFFSET = -22.1484375;
         public static final double FRONT_RIGHT_ENCODER_OFFSET = -308.4082;
